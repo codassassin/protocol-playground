@@ -1,0 +1,3 @@
+import React,{useState} from 'react';
+const legacyUrl='./legacy.html';
+export default function App(){const [reloadKey,setReloadKey]=useState(0);return <div className="pc-app"><header className="pc-header"><div className="pc-mark">⌘</div><div><strong>PACKET CITY</strong><small>Networking · learn by doing</small></div><span className="pc-tag">REACT · STATIC PAGES</span><button className="pc-refresh" onClick={()=>setReloadKey(k=>k+1)} title="Reload labs">↻</button></header><main className="pc-main"><iframe key={reloadKey} title="Packet City labs" src={legacyUrl} loading="eager"/></main></div>;}
