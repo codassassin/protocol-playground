@@ -90,7 +90,9 @@ function diagram(L,S){
  // Route strictly follows the current step's declared node sequence.
  // Never inject lab-specific node sequences here: those stale overrides
  // were the source of wrong arrows/highlights across labs.
- let path=(S.flow||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
+ // On reset/start, keep every lab visually idle. Packet motion and node
+ // highlighting begin only after the learner advances from the first step.
+ let path=step===0?[]:(S.flow||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
  let from=path.length>=2?path[path.length-2]:-1;
  let dest=path.length>=2?path[path.length-1]:(path.length===1?path[0]:-1);
  let nodes=arr.map((q,i)=>'<div class="node '+(i===dest?'highlight':'')+(labKey==='ARP'&&fault==='1'&&i===2?' offline':'')+'" style="left:'+p[i]+'%;top:50%"><div class="emoji">'+q[0]+'</div><b>'+q[1]+'</b><small>'+q[2]+(labKey==='ARP'&&fault==='1'&&i===2?' · OFFLINE':'')+'</small></div>').join('');
