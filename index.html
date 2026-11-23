@@ -67,6 +67,7 @@ body.tutor-open #packetCityTutorFab{right:calc(var(--tutor-dock-width) + 18px)}
 <script>
 const labs={
 DNS:{title:"DNS — Find the website",sub:"Explore how a name becomes an IP address.",experiment:"DNS resolution explorer",layer:7,ess:"DNS is the Internet's naming system. People use names; computers route to IP addresses. A recursive resolver does the work of finding an answer and caches it.",steps:[
+{title:"Ready · Start the DNS lookup",desc:"The simulation is idle. No DNS message has been sent yet. Press Next step to begin and watch the request travel from the client to the recursive resolver.",fields:{Status:"Ready",Action:"No packet sent yet"},nodes:[]},
 {title:"1 · Browser asks its resolver",desc:"You type <strong>example.com</strong>. Your computer asks its configured recursive resolver for an A record. The request is usually sent over UDP port 53.",fields:{Question:"example.com",RecordType:"A",Client:"192.168.1.10",Resolver:"192.168.1.53",Port:"UDP / 53"},nodes:[0,1]},
 {title:"2 · Resolver checks its cache",desc:"The resolver checks whether it already has a fresh answer. A cache hit avoids the rest of the lookup. Here we simulate a cache miss.",fields:{Cache:"MISS",Query:"example.com",TTL:"No cached entry",Action:"Resolve recursively"},nodes:[1]},
 {title:"3 · Resolver queries a root server",desc:"The recursive resolver asks a root server where it can find the .com nameservers. This is a query from the resolver to the root.",fields:{Query:"example.com",Destination:"Root DNS server",Response:"Referral lookup",Next:"com TLD"},nodes:[1,2]},
