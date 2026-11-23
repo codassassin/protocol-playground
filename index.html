@@ -100,10 +100,13 @@ function getNode(id){return nodes.find(function(n){return n.id===id})}
 function notify(s){el("netToast").textContent=s}
 function show(viewName){view=viewName;["builder","journey","terminal","subnet","missions"].forEach(function(v){el("view-"+v).classList.toggle("hidden",v!==viewName)});document.querySelectorAll("[data-view]").forEach(function(b){b.classList.toggle("active",b.dataset.view===viewName)});if(viewName==="builder")drawNetwork();if(viewName==="journey")renderFlow();if(viewName==="subnet")calcSubnet()}
 document.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){show(b.dataset.view)}});
-function drawNetwork(){
+function drawWires(){
  var svg=el("wires"),html="";
  links.forEach(function(pair,i){var a=getNode(pair[0]),b=getNode(pair[1]);if(!a||!b)return;html+='<line class="link '+(trafficNode!==null?'live':'')+'" x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" data-link="'+i+'"></line><text class="linktext" x="'+((a.x+b.x)/2)+'" y="'+((a.y+b.y)/2-8)+'">ETHERNET</text>'});
  svg.innerHTML=html;
+}
+function drawNetwork(){
+ drawWires();
  var canvas=el("canvas");canvas.querySelectorAll(".device").forEach(function(n){n.remove()});canvas.querySelectorAll(".puck").forEach(function(n){n.remove()});
  nodes.forEach(function(n){var d=document.createElement("div");d.className="device"+(selected===n.id?" selected":"");d.style.left=(n.x/10)+"%";d.style.top=(n.y/4.8)+"%";d.dataset.id=n.id;d.innerHTML='<div class="emoji">'+types[n.type].icon+'</div><b>'+esc(n.name)+'</b><small>'+esc(n.ip)+'</small>';d.onpointerdown=function(e){if(e.button!==0)return;dragId=n.id;d.setPointerCapture(e.pointerId);e.stopPropagation()};d.onpointerup=function(e){dragId=null};d.onclick=function(e){e.stopPropagation();selectNode(n.id)};canvas.appendChild(d)});
  if(trafficNode!==null){var n=getNode(trafficNode);if(n){var dot=document.createElement("div");dot.className="puck";dot.style.left=(n.x/10)+"%";dot.style.top=(n.y/4.8)+"%";canvas.appendChild(dot)}}
@@ -118,7 +121,7 @@ function selectNode(id){
 }
 function updateSelected(){var n=getNode(selected);if(!n){el("nodeName").value="";el("nodeIP").value="";return}el("nodeName").value=n.name;el("nodeIP").value=n.ip;el("nodeType").textContent=types[n.type].label;el("nodeId").textContent="NODE-"+n.id;el("inspector").textContent="DEVICE INSPECTION\nName          "+n.name+"\nType          "+types[n.type].label+"\nIPv4          "+n.ip+"\nNode ID       "+n.id+"\nLinks         "+links.filter(function(p){return p.includes(n.id)}).length;}
 el("nodeName").oninput=function(){var n=getNode(selected);if(n){n.name=this.value;drawNetwork()}};el("nodeIP").oninput=function(){var n=getNode(selected);if(n){n.ip=this.value;drawNetwork()}};
-document.addEventListener("pointermove",function(e){if(dragId===null)return;var r=el("canvas").getBoundingClientRect(),n=getNode(dragId);if(!n)return;n.x=Math.max(65,Math.min(935,(e.clientX-r.left)/r.width*1000));n.y=Math.max(70,Math.min(410,(e.clientY-r.top)/r.height*480));drawNetwork()});
+document.addEventListener("pointermove",function(e){if(dragId===null)return;var r=el("canvas").getBoundingClientRect(),n=getNode(dragId);if(!n)return;n.x=Math.max(65,Math.min(935,(e.clientX-r.left)/r.width*1000));n.y=Math.max(70,Math.min(410,(e.clientY-r.top)/r.height*480));var d=el("canvas").querySelector('.device[data-id="'+dragId+'"]');if(d){d.style.left=(n.x/10)+"%";d.style.top=(n.y/4.8)+"%";}drawWires()});
 el("palette").innerHTML=Object.keys(types).map(function(k){return '<button data-add="'+k+'">'+types[k].icon+" "+types[k].label+" +</button>"}).join("");
 el("palette").querySelectorAll("[data-add]").forEach(function(b){b.onclick=function(){var id=Math.max.apply(null,nodes.map(function(n){return n.id}).concat([0]))+1;nodes.push({id:id,type:b.dataset.add,name:types[b.dataset.add].label+"-"+String(id).padStart(2,"0"),ip:"192.168.1."+String(10+id),x:180+(nodes.length%3)*230,y:100+Math.floor(nodes.length/3)*150});selected=id;drawNetwork();notify("Device added. Drag it into position and connect it.")}});
 el("linkMode").onclick=function(){linkMode=!linkMode;linkStart=null;this.textContent="⌁ Link mode: "+(linkMode?"On":"Off");notify(linkMode?"Click two devices to connect them.":"Link mode disabled.")};
