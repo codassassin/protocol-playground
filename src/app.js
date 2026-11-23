@@ -87,11 +87,12 @@ function renderStep(){let L=labs[labKey],S=L.steps[Math.min(step,L.steps.length-
 function diagram(L,S){
  let arr=L.diagram;
  let p=arr.length===2?[15,85]:arr.length===3?[15,50,85]:arr.length===4?[12,38,64,88]:[10,30,50,70,90];
+ // Route strictly follows the current step's declared node sequence.
+ // Never inject lab-specific node sequences here: those stale overrides
+ // were the source of wrong arrows/highlights across labs.
  let path=(S.flow||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
- if(labKey==="ARP"){if(step===3)path=[0,1,2,3];else if(step===4)path=[2,0];else if(step===5)path=[1,0];}
  let from=path.length>=2?path[path.length-2]:-1;
  let dest=path.length>=2?path[path.length-1]:(path.length===1?path[0]:-1);
- if(labKey==="ARP"&&step===1)from=-1;
  let nodes=arr.map((q,i)=>'<div class="node '+(i===dest?'highlight':'')+(labKey==='ARP'&&fault==='1'&&i===2?' offline':'')+'" style="left:'+p[i]+'%;top:50%"><div class="emoji">'+q[0]+'</div><b>'+q[1]+'</b><small>'+q[2]+(labKey==='ARP'&&fault==='1'&&i===2?' · OFFLINE':'')+'</small></div>').join('');
  let base='<svg viewBox="0 0 1000 300" preserveAspectRatio="none">';
  for(let i=0;i<arr.length-1;i++){let x1=p[i]*10,x2=p[i+1]*10;base+='<line x1="'+x1+'" y1="150" x2="'+x2+'" y2="150" stroke="#304968" stroke-width="2"/>';}
