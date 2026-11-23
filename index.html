@@ -156,43 +156,29 @@ $("challenge").querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{let o
 $("faultControl").innerHTML='<div class="field"><label>Simulate a condition</label><select id="faultSelect">'+L.faults.map((x,i)=>'<option value="'+i+'">'+x+'</option>').join("")+'</select></div>';$("faultText").textContent="Fault injection affects the explanatory simulation only."; $("faultSelect").value=String(fault); $("faultSelect").onchange=e=>{fault=e.target.value;arpCached=false;faultExplain();render();};
 $("next").onclick=()=>{step=Math.min(L.steps.length-1,step+1);render()};$("prev").onclick=()=>{step=Math.max(0,step-1);render()};$("reset").onclick=reset; $("play").onclick=toggleAuto; bindControls();faultExplain();}
 function diagram(L,S){
- const arr=L.diagram||[],n=arr.length;
- const p=n===2?[15,85]:n===3?[15,50,85]:n===4?[12,38,64,88]:[10,30,50,70,90];
- // Flow DSL: a step's nodes are ordered waypoints. The engine expands
- // non-adjacent waypoints into a route on the displayed topology.
- const way=(S.flowPath||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<n);
- function expandRoute(points){
-   if(points.length<2)return points.slice();
-   const route=[points[0]];
-   for(let k=1;k<points.length;k++){
-     let from=route[route.length-1],to=points[k];
-     // Current diagram topology is a line. BFS keeps this function topology-aware.
-     const queue=[[from]],seen=new Set([from]),found=[];
-     while(queue.length&&!found.length){const q=queue.shift(),u=q[q.length-1];if(u===to){found.push(q);break;}
-       const neighbors=[u-1,u+1].filter(v=>v>=0&&v<n&&!seen.has(v));
-       for(const v of neighbors){seen.add(v);queue.push(q.concat(v));}
-     }
-     const part=found[0]||[from,to];route.push(...part.slice(1));
-   }
-   return route;
+ let arr=L.diagram;
+ let p=arr.length===2?[15,85]:arr.length===3?[15,50,85]:arr.length===4?[12,38,64,88]:[10,30,50,70,90];
+ // The step defines a source/destination pair. Highlight only the destination;
+ // the packet itself animates independently along the connecting segment.
+ let path=(S.flow||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
+ // ARP has distinct semantics: broadcast reaches the switch first, replies travel
+ // Host B -> switch -> Host A, and caching is a local operation (no packet).
+ if(labKey==="ARP"){if(step===2)path=[0,1];else if(step===3)path=[2,1,0];else if(step===4)path=[0];}
+ let from=path.length>=2?path[path.length-2]:-1;
+ let dest=path.length>=2?path[path.length-1]:(path.length===1?path[0]:-1);
+ if(labKey==="ARP"&&step===3)from=-1;
+ let nodes=arr.map((q,i)=>'<div class="node '+(i===dest?'highlight':'')+(labKey==='ARP'&&fault==='1'&&i===2?' offline':'')+'" style="left:'+p[i]+'%;top:50%"><div class="emoji">'+q[0]+'</div><b>'+q[1]+'</b><small>'+q[2]+(labKey==='ARP'&&fault==='1'&&i===2?' · OFFLINE':'')+'</small></div>').join('');
+ let base='<svg viewBox="0 0 1000 300" preserveAspectRatio="none"><defs></defs>';
+ for(let i=0;i<arr.length-1;i++){let x1=p[i]*10,x2=p[i+1]*10;base+='<line x1="'+x1+'" y1="150" x2="'+x2+'" y2="150" stroke="#304968" stroke-width="2"/>';}
+ let activeArrow='';
+ if(from>=0&&dest>=0&&from!==dest){
+   let x1=p[from]*10,x2=p[dest]*10;
+   let dir=x2>x1?1:-1,offset=70;
+   let edge1=x1+dir*offset,edge2=x2-dir*offset;
+   let travel='M '+edge1+' 150 L '+edge2+' 150';
+   activeArrow='<path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="2.5" stroke-linecap="round" opacity=".25"/><path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round"><animate attributeName="stroke-dasharray" values="0 1000;18 1000;18 1000" dur="1.05s" fill="freeze"/><animate attributeName="stroke-dashoffset" from="0" to="-'+Math.abs(edge2-edge1)+'" dur="1.05s" fill="freeze"/></path><g><path d="M -7 -5 L 7 0 L -7 5 Z" fill="#5bd9ed" filter="drop-shadow(0 0 5px #5bd9ed)"><animateMotion dur="1.05s" begin="0s" fill="freeze" rotate="auto" path="'+travel+'"/></path></g>';
  }
- const route=expandRoute(way);
- const source=route.length>=2?route[0]:-1,dest=route.length>=2?route[route.length-1]:(route.length===1?route[0]:-1);
- const nodes=arr.map((q,i)=>'<div class="node '+(i===dest?'highlight':'')+(labKey==='ARP'&&fault==='1'&&i===2?' offline':'')+'" style="left:'+p[i]+'%;top:50%"><div class="emoji">'+q[0]+'</div><b>'+q[1]+'</b><small>'+q[2]+(labKey==='ARP'&&fault==='1'&&i===2?' · OFFLINE':'')+'</small></div>').join('');
- let svg='<svg viewBox="0 0 1000 300" preserveAspectRatio="none">';
- for(let i=0;i<n-1;i++)svg+='<line x1="'+(p[i]*10)+'" y1="150" x2="'+(p[i+1]*10)+'" y2="150" stroke="#304968" stroke-width="2"/>';
- let active='';
- // Arrow and glow are strictly absent in idle/local-only steps. For multi-hop
- // routes, animate along the complete path and let auto-rotation orient the tip.
- if(route.length>=2){
-   const offset=70;
-   let coords=route.map(i=>p[i]*10);
-   coords[0]+=coords[1]>coords[0]?offset:-offset;
-   coords[coords.length-1]+=coords[coords.length-2]>coords[coords.length-1]?offset:-offset;
-   let path='M '+coords[0]+' 150 '+coords.slice(1).map(x=>'L '+x+' 150').join(' ');
-   active='<path d="'+path+'" fill="none" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round" opacity=".25"/><g><path d="M -8 -5 L 8 0 L -8 5 Z" fill="#5bd9ed" filter="drop-shadow(0 0 5px #5bd9ed)"><animateMotion dur="1.05s" begin="0s" fill="freeze" rotate="auto" path="'+path+'"/></path></g>';
- }
- return svg+active+'</svg>'+nodes;
+ return base+activeArrow+'</svg>'+nodes
 }
 function faultExplain(){let L=labs[labKey],txt=L.faults[Number(fault)]||L.faults[0]||"Normal";$("faultText").textContent="Scenario: "+txt+" · simulation behaviour is modified where supported.";if(labKey==="ARP"&&fault==="1")$("faultText").textContent="Target offline: ARP requests receive no reply; steps 3–4 show timeout and failed resolution.";if(labKey==="ARP"&&fault==="2")$("faultText").textContent="Cache hit: the known MAC is used without a broadcast request."; }
 function bindControls(){if(labKey==="DNS"){ $("lookup").onclick=()=>{cache=false;step=0;render();$("dnsCache").textContent="Lookup started: "+$("hostname").value+" · cache miss";};$("clearCache").onclick=()=>{cache=false;$("dnsCache").textContent="Cache cleared. Next lookup will require recursive resolution.";};}
