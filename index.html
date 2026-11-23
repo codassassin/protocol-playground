@@ -141,6 +141,46 @@ var packets=[
 {title:"HTTPS GET",tag:"HTTP over TLS",layer:7,desc:"The browser sends an HTTP request inside the encrypted TLS channel. Network observers can see IP and transport metadata, but not the protected HTTP content.",fields:{Request:"GET / HTTP/1.1",Host:"example.com",Accept:"text/html",Protection:"TLS encrypted"}},
 {title:"HTTP 200 response",tag:"HTTP over TLS",layer:7,desc:"The server returns a success status, headers and body. The browser parses the HTML and may fetch additional resources.",fields:{Status:"200 OK",ContentType:"text/html; charset=utf-8",Body:"HTML document",Protection:"TLS encrypted"}}
 ];
+var activeLab="HTTP";
+var labFlows={
+TCP:[
+{title:"SYN",tag:"TCP",layer:4,desc:"The client opens a connection with a SYN segment and an initial sequence number.",fields:{SourcePort:"51514",DestinationPort:"443",Flags:"SYN",Sequence:"1000"}},
+{title:"SYN-ACK",tag:"TCP",layer:4,desc:"The server acknowledges the client's SYN and sends its own sequence number.",fields:{SourcePort:"443",DestinationPort:"51514",Flags:"SYN, ACK",Sequence:"7000",Acknowledgment:"1001"}},
+{title:"ACK",tag:"TCP",layer:4,desc:"The client acknowledges the server's sequence number. The three-way handshake is complete.",fields:{Flags:"ACK",Acknowledgment:"7001",State:"ESTABLISHED"}},
+{title:"Data segment",tag:"TCP",layer:4,desc:"TCP transports an ordered byte stream. Sequence numbers identify the byte positions in the stream.",fields:{Payload:"HELLO",Sequence:"1001",Flags:"PSH, ACK",Window:"64240"}},
+{title:"Acknowledgement",tag:"TCP",layer:4,desc:"The receiver acknowledges the next byte it expects. Lost data can be retransmitted.",fields:{Flags:"ACK",Acknowledgment:"1006",Result:"Bytes acknowledged"}}
+],
+UDP:[
+{title:"Create datagram",tag:"UDP",layer:4,desc:"The application gives UDP a payload and source/destination ports. UDP does not need a connection handshake.",fields:{SourcePort:"53000",DestinationPort:"5000",Length:"13 bytes",Checksum:"0xA42F"}},
+{title:"IP forwarding",tag:"UDP over IP",layer:3,desc:"UDP adds its header and passes the datagram to IP for delivery toward the destination.",fields:{Protocol:"UDP (17)",SourceIP:"192.168.1.10",DestinationIP:"192.168.1.20",TTL:"64"}},
+{title:"Receive datagram",tag:"UDP",layer:4,desc:"If the datagram arrives, the destination application receives it. UDP itself does not promise retransmission or ordering.",fields:{Socket:"0.0.0.0:5000",Payload:"HELLO",Ordering:"Not guaranteed",Reliability:"Best effort"}}
+],
+DNS:[
+{title:"Client query",tag:"DNS / UDP",layer:7,desc:"The client asks its configured recursive resolver for an A record for the hostname.",fields:{Question:"example.com",Type:"A",Destination:"192.168.1.53:53",TransactionID:"0x4A2C"}},
+{title:"Cache lookup",tag:"DNS cache",layer:7,desc:"The recursive resolver checks whether it already has a valid cached response. A cache hit can avoid further queries.",fields:{Cache:"MISS (example)",TTL:"No valid cached entry",Action:"Resolve recursively"}},
+{title:"Root and TLD referrals",tag:"DNS hierarchy",layer:7,desc:"The resolver follows referrals: root servers point toward the .com name servers, which point toward the domain's authoritative servers.",fields:{Root:"Referral to .com",TLD:".com name servers",Next:"Authoritative servers"}},
+{title:"Authoritative answer",tag:"DNS response",layer:7,desc:"The authoritative server responds with an address record. The recursive resolver caches it according to its TTL and replies to the client.",fields:{Answer:"93.184.216.34",Type:"A",TTL:"3600 seconds",Status:"NOERROR"}}
+],
+TLS:[
+{title:"ClientHello",tag:"TLS 1.3",layer:6,desc:"The client sends supported versions, cipher suites, extensions and a key share. SNI commonly indicates the target hostname.",fields:{Handshake:"ClientHello",SupportedVersions:"TLS 1.3, TLS 1.2",SNI:"example.com",KeyShare:"X25519"}},
+{title:"ServerHello",tag:"TLS 1.3",layer:6,desc:"The server selects a version and cipher suite and provides its key share. Both sides can derive handshake secrets.",fields:{Handshake:"ServerHello",Version:"TLS 1.3",Cipher:"TLS_AES_128_GCM_SHA256",KeyShare:"X25519"}},
+{title:"Certificate validation",tag:"TLS identity",layer:6,desc:"The server proves its identity with certificate information and handshake authentication. The client validates trust, hostname and validity.",fields:{Certificate:"Server certificate chain",Checks:"Trust / hostname / validity",Authentication:"CertificateVerify"}},
+{title:"Finished messages",tag:"Encrypted handshake",layer:6,desc:"Finished messages authenticate the handshake transcript. Application traffic keys protect subsequent HTTP data.",fields:{Message:"Finished",TrafficKeys:"Derived",Protection:"Confidentiality + integrity",Next:"Encrypted application data"}}
+],
+IP:[
+{title:"Create IP packet",tag:"IPv4",layer:3,desc:"The host creates an IP packet with source and destination addresses, a protocol identifier and a TTL.",fields:{Source:"192.168.1.10",Destination:"203.0.113.9",Protocol:"TCP (6)",TTL:"64"}},
+{title:"Longest-prefix route lookup",tag:"Routing",layer:3,desc:"The router compares the destination address against its routing table and chooses the most specific matching prefix.",fields:{Destination:"203.0.113.9",Lookup:"Longest prefix match",SelectedRoute:"203.0.113.0/24",NextHop:"10.0.0.2"}},
+{title:"Forward and decrement TTL",tag:"IP forwarding",layer:3,desc:"A router forwards the packet to the next hop and decrements TTL. At zero, the packet is discarded and ICMP Time Exceeded may be sent.",fields:{TTL:"64 → 63",Action:"Forward",HeaderChecksum:"Recalculated (IPv4)"}},
+{title:"Destination network",tag:"Delivery",layer:3,desc:"The packet reaches the destination network. The final link-layer frame is addressed to the destination host's MAC address.",fields:{Destination:"203.0.113.9",TTL:"Remaining",Result:"Delivered (illustrative)"}}
+],
+ARP:[
+{title:"Check ARP cache",tag:"ARP cache",layer:2,desc:"Before sending to a local IPv4 neighbor, the host checks whether it already knows the matching MAC address.",fields:{TargetIP:"192.168.1.20",Cache:"MISS",Action:"Broadcast request"}},
+{title:"Broadcast ARP request",tag:"ARP request",layer:2,desc:"The host broadcasts a request on the LAN asking which device owns the target IPv4 address.",fields:{Opcode:"Request (1)",SenderIP:"192.168.1.10",TargetIP:"192.168.1.20",DestinationMAC:"ff:ff:ff:ff:ff:ff"}},
+{title:"Receive ARP reply",tag:"ARP reply",layer:2,desc:"The host owning the requested IP replies with its MAC address. The reply is generally unicast to the requester.",fields:{Opcode:"Reply (2)",SenderIP:"192.168.1.20",SenderMAC:"02:00:00:00:00:20",Delivery:"Unicast"}},
+{title:"Store mapping",tag:"Neighbor cache",layer:2,desc:"The sender stores the IP-to-MAC mapping temporarily and can now build Ethernet frames addressed to the neighbor.",fields:{Mapping:"192.168.1.20 → 02:00:00:00:00:20",Status:"Cached",Next:"Ethernet frame"}}
+]
+};
+document.querySelectorAll("[data-lab]").forEach(function(b){b.onclick=function(){activeLab=b.dataset.lab;packets=labFlows[activeLab]||packets;stopFlow();flowIndex=-1;show("journey");renderFlow();document.querySelectorAll("[data-lab]").forEach(function(x){x.classList.toggle("active",x.dataset.lab===activeLab)})}});
 function renderFlow(){el("stepCount").textContent=Math.max(0,flowIndex+1)+" / "+packets.length;el("steps").innerHTML=packets.map(function(p,i){return '<div class="step '+(i===flowIndex?"active":i<flowIndex?"done":"")+'" data-step="'+i+'"><div class="stepnum">'+(i<flowIndex?"✓":i+1)+'</div><div><strong>'+p.title+'</strong><small>'+p.desc.slice(0,82)+'…</small></div><em>'+p.tag+"</em></div>"}).join("");el("steps").querySelectorAll("[data-step]").forEach(function(b){b.onclick=function(){stopFlow();flowIndex=+b.dataset.step;renderFlow()}});
  if(flowIndex<0){el("flowProto").textContent="READY";el("explain").textContent="Start the flow or select a packet in the timeline.";el("flowFields").innerHTML="";el("inspector").textContent="Select a node or a packet to inspect its details.";el("osi").innerHTML=layerHtml(0);el("flowPuck").classList.add("hidden");return}
  var p=packets[flowIndex];el("flowProto").textContent=p.tag;el("explain").textContent=p.desc;el("flowFields").innerHTML=Object.entries(p.fields).map(function(kv){return '<div class="kv"><span>'+kv[0]+'</span><span>'+kv[1]+"</span></div>"}).join("");el("inspector").textContent="PACKET DECODE\nProtocol       "+p.tag+"\nStep           "+(flowIndex+1)+" / "+packets.length+"\n"+Object.entries(p.fields).map(function(kv){return kv[0].padEnd(16)+" "+kv[1]}).join("\n");el("osi").innerHTML=layerHtml(p.layer);var puck=el("flowPuck");puck.classList.remove("hidden");puck.style.left=(12+flowIndex/(packets.length-1)*76)+"%";puck.style.top="50%";
