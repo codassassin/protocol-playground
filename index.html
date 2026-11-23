@@ -145,22 +145,24 @@ $("next").onclick=()=>{step=Math.min(L.steps.length-1,step+1);render()};$("prev"
 function diagram(L,S){
  let arr=L.diagram;
  let p=arr.length===2?[15,85]:arr.length===3?[15,50,85]:arr.length===4?[12,38,64,88]:[10,30,50,70,90];
+ // Step path arrays are ordered source -> destination. Draw only the final hop,
+ // and highlight only that hop's destination so arrow and node cannot disagree.
  let path=(S.nodes||S.flow||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
- let route=path.length>1?path:[];
- let dest=route.length?route[route.length-1]:(path.length?path[0]:-1);
+ let from=path.length>=2?path[path.length-2]:-1;
+ let dest=path.length?path[path.length-1]:-1;
  let nodes=arr.map((q,i)=>'<div class="node '+(i===dest?'highlight':'')+(labKey==='ARP'&&fault==='1'&&i===2?' offline':'')+'" style="left:'+p[i]+'%;top:50%"><div class="emoji">'+q[0]+'</div><b>'+q[1]+'</b><small>'+q[2]+(labKey==='ARP'&&fault==='1'&&i===2?' · OFFLINE':'')+'</small></div>').join('');
  let base='<svg viewBox="0 0 1000 300" preserveAspectRatio="none"><defs><marker id="flowArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5bd9ed"/></marker></defs>';
  for(let i=0;i<arr.length-1;i++){let x1=p[i]*10,x2=p[i+1]*10;base+='<line x1="'+x1+'" y1="150" x2="'+x2+'" y2="150" stroke="#304968" stroke-width="2"/>';}
  let activeArrow='';
- if(route.length>=2){
-  for(let h=0;h<route.length-1;h++){
-   let from=route[h],to=route[h+1],x1=p[from]*10,x2=p[to]*10,offset=70;
-   let edge1=x1+(to>from?offset:-offset),edge2=x2+(to>from?-offset:offset);
-   activeArrow+='<line class="flowline" x1="'+edge1+'" y1="150" x2="'+edge2+'" y2="150" marker-end="url(#flowArrow)" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round"/>';
-  }
+ if(from>=0&&dest>=0&&from!==dest){
+   let x1=p[from]*10,x2=p[dest]*10;
+   let dir=x2>x1?1:-1,offset=70;
+   let edge1=x1+dir*offset,edge2=x2-dir*offset;
+   activeArrow='<line class="flowline" x1="'+edge1+'" y1="150" x2="'+edge2+'" y2="150" marker-end="url(#flowArrow)" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round"/>';
  }
  return base+activeArrow+'</svg>'+nodes
-}function faultExplain(){let L=labs[labKey],txt=L.faults[Number(fault)]||L.faults[0]||"Normal";$("faultText").textContent="Scenario: "+txt+" · simulation behaviour is modified where supported.";if(labKey==="ARP"&&fault==="1")$("faultText").textContent="Target offline: ARP requests receive no reply; steps 3–4 show timeout and failed resolution.";if(labKey==="ARP"&&fault==="2")$("faultText").textContent="Cache hit: the known MAC is used without a broadcast request."; }
+}
+function faultExplain(){let L=labs[labKey],txt=L.faults[Number(fault)]||L.faults[0]||"Normal";$("faultText").textContent="Scenario: "+txt+" · simulation behaviour is modified where supported.";if(labKey==="ARP"&&fault==="1")$("faultText").textContent="Target offline: ARP requests receive no reply; steps 3–4 show timeout and failed resolution.";if(labKey==="ARP"&&fault==="2")$("faultText").textContent="Cache hit: the known MAC is used without a broadcast request."; }
 function bindControls(){if(labKey==="DNS"){ $("lookup").onclick=()=>{cache=false;step=0;render();$("dnsCache").textContent="Lookup started: "+$("hostname").value+" · cache miss";};$("clearCache").onclick=()=>{cache=false;$("dnsCache").textContent="Cache cleared. Next lookup will require recursive resolution.";};}
 if(labKey==="TCP"){$("applySeq").onclick=()=>{isn=Number($("isn").value);sIsn=Number($("serverIsn").value);labs.TCP.steps[0].fields.Sequence=String(isn);labs.TCP.steps[1].fields.Acknowledgment=String(isn+1);labs.TCP.steps[1].fields.Sequence=String(sIsn);labs.TCP.steps[2].fields.Acknowledgment=String(sIsn+1);labs.TCP.steps[2].fields.Sequence=String(isn+1);render();$("tcpNote").textContent="Sequence values updated throughout the handshake.";};$("dropSynack").onclick=()=>{$("tcpNote").textContent="SYN-ACK dropped: client cannot complete handshake; it may retry the SYN.";};}
 if(labKey==="UDP"){$("sendDatagrams").onclick=()=>{$("udpResults").textContent=udpLoss?"Sent 1, 2, 4, 5 · datagram #3 lost. UDP itself does not retry.":"Sent 1, 2, 3, 4, 5 · delivery depends on simulated network.";};$("shuffle").onclick=()=>{$("udpResults").textContent="Receiver observed: 2, 1, 4, 3, 5 · ordering is not guaranteed.";udpReorder=true;};$("lose").onclick=()=>{udpLoss=!udpLoss;$("udpResults").textContent="Packet loss "+(udpLoss?"enabled":"disabled")+" · press Send 5 datagrams to test.";};}
