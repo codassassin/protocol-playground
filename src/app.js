@@ -82,7 +82,31 @@ const layerNames=["Physical","Data Link","Network","Transport","Session","Presen
 let labKey="DNS",step=0,auto=null,cache=false,udpLoss=false,udpReorder=false,arpCached=false,fault="0",isn=1000,sIsn=7000;
 function $(id){return document.getElementById(id)}
 function render(){renderLabStatic();renderStep();}
-function renderLabStatic(){let L=labs[labKey];$("labTitle").textContent=L.title;$("labSub").textContent=L.sub;$("experimentTitle").textContent=L.experiment;$("essentials").textContent=L.ess;$("osi").innerHTML=layerNames.map((n,i)=>'<div class="layer '+(i+1===L.layer?'active':'')+'"><span>'+(i+1)+'. '+n+'</span><b>'+layerUnits[i]+'</b></div>').reverse().join("");$("labControls").innerHTML=L.controls;$("challenge").innerHTML='<p class="story" style="min-height:auto">'+L.challenge.q+'</p>'+L.challenge.opts.map((o,i)=>'<button class="choice" data-choice="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>').join("");$("challenge").querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{let ok=+b.dataset.choice===L.challenge.a;$("challenge").querySelectorAll("button").forEach(x=>x.classList.remove("good","bad"));b.classList.add(ok?"good":"bad");$("feedback").textContent=ok?L.challenge.why:"Not quite — revisit the steps, then try again."});$("faultControl").innerHTML='<div class="field"><label>Simulate a condition</label><select id="faultSelect">'+L.faults.map((x,i)=>'<option value="'+i+'">'+x+'</option>').join("")+'</select></div>';$("faultSelect").value=String(fault);$("faultSelect").onchange=e=>{fault=e.target.value;arpCached=false;render();};$("next").onclick=()=>{step=Math.min(labs[labKey].steps.length-1,step+1);renderStep();};$("prev").onclick=()=>{step=Math.max(0,step-1);renderStep();};$("reset").onclick=reset;$("play").onclick=toggleAuto;bindControls();faultExplain();}
+function renderLabStatic(){
+ const L=labs[labKey]; if(!L)return;
+ const put=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
+ const html=(id,value)=>{const el=$(id);if(el)el.innerHTML=value;};
+ const bind=(id,handler)=>{const el=$(id);if(el)el.onclick=handler;};
+ put("labTitle",L.title);put("labSub",L.sub);put("experimentTitle",L.experiment);put("essentials",L.ess);
+ html("osi",layerNames.map((n,i)=>'<div class="layer '+(i+1===L.layer?'active':'')+'"><span>'+(i+1)+'. '+n+'</span><b>'+layerUnits[i]+'</b></div>').reverse().join(""));
+ html("labControls",L.controls||"");
+ const challenge=$("challenge");
+ if(challenge&&L.challenge){
+  challenge.innerHTML='<p class="story" style="min-height:auto">'+L.challenge.q+'</p>'+L.challenge.opts.map((o,i)=>'<button class="choice" data-choice="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>').join("");
+  challenge.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
+   const ok=+b.dataset.choice===L.challenge.a;
+   challenge.querySelectorAll("button").forEach(x=>x.classList.remove("good","bad"));
+   b.classList.add(ok?"good":"bad");put("feedback",ok?L.challenge.why:"Not quite — revisit the steps, then try again.");
+  });
+ }
+ html("faultControl",'<div class="field"><label>Simulate a condition</label><select id="faultSelect">'+(L.faults||[]).map((x,i)=>'<option value="'+i+'">'+x+'</option>').join("")+'</select></div>');
+ const fs=$("faultSelect");if(fs){fs.value=String(fault);fs.onchange=e=>{fault=e.target.value;arpCached=false;render();};}
+ bind("next",()=>{step=Math.min(labs[labKey].steps.length-1,step+1);renderStep();});
+ bind("prev",()=>{step=Math.max(0,step-1);renderStep();});
+ bind("reset",reset);bind("play",toggleAuto);
+ try{bindControls();}catch(err){console.warn("Packet City control binding skipped:",err);}
+ try{faultExplain();}catch(err){console.warn("Packet City fault explanation skipped:",err);}
+}
 function renderStep(){
  const L=labs[labKey]; if(!L||!Array.isArray(L.steps)||!L.steps.length)return;
  let S=L.steps[Math.min(step,L.steps.length-1)];
