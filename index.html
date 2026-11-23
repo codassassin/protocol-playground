@@ -137,6 +137,14 @@ QUIC:makeProtocolLab({title:"QUIC — Modern transport for HTTP/3",sub:"Explore 
 WebSocket:makeProtocolLab({title:"WebSocket — Keep a live channel open",sub:"Understand upgrade, bidirectional messages and close.",experiment:"WebSocket live communication",layer:7,ess:"WebSocket creates a bidirectional communication channel over a connection, typically initiated through an HTTP Upgrade handshake for ws or protected wss.",nodes:[["💻","Browser","Client"],["↔","WebSocket","Persistent"],["🖥️","Service","Server"]],steps:[["HTTP handshake","The client starts with an HTTP request requesting an upgrade to WebSocket.",{Request:"GET /chat",Upgrade:"websocket",Connection:"Upgrade",Scheme:"ws / wss"},[0,1]],["Upgrade accepted","The server accepts the protocol switch with status 101 in classic HTTP/1.1 Upgrade.",{Status:"101 Switching Protocols",Upgrade:"websocket",Result:"Channel established"},[1,2]],["Bidirectional frames","Both sides can send frames without starting a new HTTP request each time.",{Frames:"Text · binary · control",Direction:"Bidirectional",Use:"Live updates / chat"},[0,2]],["Close","Either side can initiate a close handshake; the connection then closes.",{Frame:"Close",Status:"Closing handshake",Connection:"Closed"},[1]]],challenge:["WebSocket enables:",["Bidirectional messaging on a persistent connection","Only one-way DNS queries","IP routing updates"],0,"Correct. WebSocket allows both client and server to send data over an established channel."]})
 });
 
+// Normalize initial/reset state across every lab: no active packet or highlighted destination until Next step.
+// DNS already includes an explicit idle step.
+Object.keys(labs).forEach(key=>{
+ const first=labs[key].steps[0];
+ if(!first || !/^Ready\\b/i.test(first.title||"")){
+  labs[key].steps.unshift({title:"Ready · Start the simulation",desc:"The simulation is idle. No packet or message has been sent yet. Press Next step to begin and follow the network flow.",fields:{Status:"Ready",Action:"No packet sent yet"},nodes:[],flow:[]});
+ }
+});
 const layerNames=["Physical","Data Link","Network","Transport","Session","Presentation","Application"],layerUnits=["Bits","Frames","Packets","Segments","Sessions","Data","Requests"];
 let labKey="DNS",step=0,auto=null,cache=false,udpLoss=false,udpReorder=false,arpCached=false,fault="0",isn=1000,sIsn=7000;
 function $(id){return document.getElementById(id)}
@@ -155,7 +163,7 @@ function diagram(L,S){
  let path=(S.flow||S.nodes||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<arr.length);
  // ARP has distinct semantics: broadcast reaches the switch first, replies travel
  // Host B -> switch -> Host A, and caching is a local operation (no packet).
- if(labKey==="ARP"){if(step===1)path=[0,1];else if(step===2)path=[2,1,0];else if(step===3)path=[0];}
+ if(labKey==="ARP"){if(step===2)path=[0,1];else if(step===3)path=[2,1,0];else if(step===4)path=[0];}
  let from=path.length>=2?path[path.length-2]:-1;
  let dest=path.length>=2?path[path.length-1]:(path.length===1?path[0]:-1);
  if(labKey==="ARP"&&step===3)from=-1;
