@@ -164,7 +164,7 @@ function diagram(L,S){
    let dir=x2>x1?1:-1,offset=70;
    let edge1=x1+dir*offset,edge2=x2-dir*offset;
    let travel='M '+edge1+' 150 L '+edge2+' 150';
-   activeArrow='<path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="2.5" stroke-linecap="round" opacity=".25"/><path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round"><animate attributeName="stroke-dasharray" values="0 1000;18 1000;18 1000" dur="1.05s" fill="freeze"/><animate attributeName="stroke-dashoffset" from="0" to="-'+Math.abs(edge2-edge1)+'" dur="1.05s" fill="freeze"/></path><g><path d="M -7 -5 L 7 0 L -7 5 Z" fill="#5bd9ed" filter="drop-shadow(0 0 5px #5bd9ed)"><animateMotion dur="1.05s" begin="0s" fill="freeze" path="'+travel+'"/></path></g>';
+   activeArrow='<path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="2.5" stroke-linecap="round" opacity=".25"/><path d="'+travel+'" fill="none" stroke="#5bd9ed" stroke-width="3" stroke-linecap="round"><animate attributeName="stroke-dasharray" values="0 1000;18 1000;18 1000" dur="1.05s" fill="freeze"/><animate attributeName="stroke-dashoffset" from="0" to="-'+Math.abs(edge2-edge1)+'" dur="1.05s" fill="freeze"/></path><g><path d="M -7 -5 L 7 0 L -7 5 Z" fill="#5bd9ed" filter="drop-shadow(0 0 5px #5bd9ed)"><animateMotion dur="1.05s" begin="0s" fill="freeze" orient="auto" path="'+travel+'"/></path></g>';
  }
  return base+activeArrow+'</svg>'+nodes
 }
