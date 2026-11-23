@@ -83,7 +83,24 @@ let labKey="DNS",step=0,auto=null,cache=false,udpLoss=false,udpReorder=false,arp
 function $(id){return document.getElementById(id)}
 function render(){renderLabStatic();renderStep();}
 function renderLabStatic(){let L=labs[labKey];$("labTitle").textContent=L.title;$("labSub").textContent=L.sub;$("experimentTitle").textContent=L.experiment;$("essentials").textContent=L.ess;$("osi").innerHTML=layerNames.map((n,i)=>'<div class="layer '+(i+1===L.layer?'active':'')+'"><span>'+(i+1)+'. '+n+'</span><b>'+layerUnits[i]+'</b></div>').reverse().join("");$("labControls").innerHTML=L.controls;$("challenge").innerHTML='<p class="story" style="min-height:auto">'+L.challenge.q+'</p>'+L.challenge.opts.map((o,i)=>'<button class="choice" data-choice="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>').join("");$("challenge").querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{let ok=+b.dataset.choice===L.challenge.a;$("challenge").querySelectorAll("button").forEach(x=>x.classList.remove("good","bad"));b.classList.add(ok?"good":"bad");$("feedback").textContent=ok?L.challenge.why:"Not quite — revisit the steps, then try again."});$("faultControl").innerHTML='<div class="field"><label>Simulate a condition</label><select id="faultSelect">'+L.faults.map((x,i)=>'<option value="'+i+'">'+x+'</option>').join("")+'</select></div>';$("faultSelect").value=String(fault);$("faultSelect").onchange=e=>{fault=e.target.value;arpCached=false;render();};$("next").onclick=()=>{step=Math.min(labs[labKey].steps.length-1,step+1);renderStep();};$("prev").onclick=()=>{step=Math.max(0,step-1);renderStep();};$("reset").onclick=reset;$("play").onclick=toggleAuto;bindControls();faultExplain();}
-function renderStep(){let L=labs[labKey],S=L.steps[Math.min(step,L.steps.length-1)];if(labKey==="ARP"&&fault==="1"&&step>=2){S=JSON.parse(JSON.stringify(S));if(step===2){S.title="3 · No ARP reply";S.desc="Host B is offline. No device responds to the broadcast ARP request, so the sender cannot learn the target MAC address.";S.fields={Opcode:"1 — Request (broadcast)",TargetIP:"192.168.1.20",Result:"No reply · target offline",Status:"Waiting / timeout"};S.nodes=[0,1,3];S.wire=1;}else{S.title="4 · Resolution failed";S.desc="The ARP request timed out without a reply. The IP-to-MAC mapping is not cached, and traffic to this neighbor cannot be delivered on the LAN.";S.fields={Mapping:"192.168.1.20 → UNKNOWN",Status:"Not cached",Result:"ARP resolution failed"};S.nodes=[0];S.wire=0;}}$("stepHint").textContent="STEP "+(step+1)+" / "+L.steps.length;$("stepText").textContent=S.title;$("story").innerHTML="<h3>"+S.title+"</h3>"+S.desc;$("packetFields").innerHTML=Object.entries(S.fields).map(([k,v])=>'<div class="kv"><span>'+k+'</span><span>'+v+'</span></div>').join("");$("raw").textContent="SIMULATED "+labKey+" MESSAGE\n"+Object.entries(S.fields).map(([k,v])=>k.padEnd(18)+" "+v).join("\n");$("visual").innerHTML=diagram(L,S);$("feedback").textContent="";}
+function renderStep(){
+ const L=labs[labKey]; if(!L||!Array.isArray(L.steps)||!L.steps.length)return;
+ let S=L.steps[Math.min(step,L.steps.length-1)];
+ if(labKey==="ARP"&&fault==="1"&&step>=2){
+  S=JSON.parse(JSON.stringify(S));
+  if(step===2){S.title="3 · No ARP reply";S.desc="Host B is offline. No device responds to the broadcast ARP request, so the sender cannot learn the target MAC address.";S.fields={Opcode:"1 — Request (broadcast)",TargetIP:"192.168.1.20",Result:"No reply · target offline",Status:"Waiting / timeout"};S.nodes=[0,1,3];S.wire=1;}
+  else{S.title="4 · Resolution failed";S.desc="The ARP request timed out without a reply. The IP-to-MAC mapping is not cached, and traffic to this neighbor cannot be delivered on the LAN.";S.fields={Mapping:"192.168.1.20 → UNKNOWN",Status:"Not cached",Result:"ARP resolution failed"};S.nodes=[0];S.wire=0;}
+ }
+ const put=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
+ const html=(id,value)=>{const el=$(id);if(el)el.innerHTML=value;};
+ put("stepHint","STEP "+(step+1)+" / "+L.steps.length);
+ put("stepText",S.title);
+ html("story","<h3>"+S.title+"</h3>"+(S.desc||""));
+ html("packetFields",Object.entries(S.fields||{}).map(([k,v])=>'<div class="kv"><span>'+k+'</span><span>'+v+'</span></div>').join(""));
+ put("raw","SIMULATED "+labKey+" MESSAGE\n"+Object.entries(S.fields||{}).map(([k,v])=>k.padEnd(18)+" "+v).join("\n"));
+ html("visual",diagram(L,S));
+ put("feedback","");
+}
 function diagram(L,S){
  let arr=L.diagram;
  let p=arr.length===2?[15,85]:arr.length===3?[15,50,85]:arr.length===4?[12,38,64,88]:[10,30,50,70,90];
