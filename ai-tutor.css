@@ -85,3 +85,33 @@ body{
 }
 #quick{flex-shrink:0!important}
 #chat>div:last-child{flex-shrink:0!important}
+
+/* Structural layout correction: #messages must not be height:100% inside its
+   fractional grid row, otherwise it over-constrains the grid and pushes the
+   following quick-prompt/composer rows toward the top. */
+#chat{
+  display:none;
+  position:absolute!important;
+  inset:0!important;
+  height:auto!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr) auto auto!important;
+  align-content:stretch!important;
+  overflow:hidden!important;
+}
+#messages{
+  height:auto!important;
+  max-height:none!important;
+  min-height:0!important;
+  width:100%!important;
+  align-self:stretch!important;
+  overflow-y:auto!important;
+  justify-content:flex-start!important;
+}
+#messages:has(>.msg:only-child){justify-content:flex-start!important}
+#messages:has(>.msg:only-child)>.msg{margin-block:0!important}
+#quick{width:100%;align-self:end!important}
+#chat>div:last-child{width:100%;align-self:end!important}
+#form{width:100%}
