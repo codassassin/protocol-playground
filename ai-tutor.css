@@ -125,3 +125,12 @@ html::-webkit-scrollbar-thumb:hover,body::-webkit-scrollbar-thumb:hover,#chat::-
 body[data-theme="ink"],body[data-theme="ink"] #chat,body[data-theme="ink"] #messages{scrollbar-color:#8b887f transparent}
 body[data-theme="ink"]::-webkit-scrollbar-thumb,body[data-theme="ink"] #chat::-webkit-scrollbar-thumb,body[data-theme="ink"] #messages::-webkit-scrollbar-thumb{background:#8b887f;border:2px solid transparent;background-clip:content-box}
 body[data-theme="ink"]::-webkit-scrollbar-thumb:hover,body[data-theme="ink"] #chat::-webkit-scrollbar-thumb:hover,body[data-theme="ink"] #messages::-webkit-scrollbar-thumb:hover{background:#5e5b54;border:1px solid transparent;background-clip:content-box}
+
+/* Hide native scrollbar chrome entirely in the embedded tutor.
+   Scrollable regions (notably #messages) remain scrollable via wheel/touch/keyboard. */
+*,*::before,*::after{scrollbar-width:none!important;-ms-overflow-style:none!important}
+*::-webkit-scrollbar,*::-webkit-scrollbar-track,*::-webkit-scrollbar-thumb{
+  display:none!important;width:0!important;height:0!important;background:transparent!important;
+}
+html,body{overflow:hidden!important}
+#messages{overflow-y:auto!important;overscroll-behavior:contain}
