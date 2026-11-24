@@ -134,3 +134,7 @@ body[data-theme="ink"]::-webkit-scrollbar-thumb:hover,body[data-theme="ink"] #ch
 }
 html,body{overflow:hidden!important}
 #messages{overflow-y:auto!important;overscroll-behavior:contain}
+
+/* Remove scrollbar gutter/track, not just the thumb. All scroll remains functional. */
+html,body,#gate,#chat,#messages{scrollbar-width:none!important;scrollbar-gutter:auto!important;-ms-overflow-style:none!important}
+html::-webkit-scrollbar,body::-webkit-scrollbar,#gate::-webkit-scrollbar,#chat::-webkit-scrollbar,#messages::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
