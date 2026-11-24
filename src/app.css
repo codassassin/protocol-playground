@@ -65,3 +65,8 @@ main{max-width:none;display:flex;align-items:stretch;gap:16px;padding:clamp(12px
 @media(max-width:1250px){.labhead{align-items:flex-start;flex-wrap:wrap}.labhead .controls{width:100%;justify-content:flex-start;flex-wrap:wrap}}
 @media(max-width:800px){.labhead .controls{gap:6px}.labhead .controls button{min-width:80px;height:40px;padding:0 12px}}
 @media(prefers-reduced-motion:reduce){.labhead .controls button:hover:not(:disabled){transform:none}}
+
+/* Keep simulation controls accessible while the learner scrolls through the guide/inspector */
+.labhead{position:sticky;top:54px;z-index:20;background:var(--bg);padding:12px 0 14px;margin:0 0 10px;border-bottom:1px solid var(--line);box-shadow:0 8px 18px color-mix(in srgb,var(--bg) 65%,transparent)}
+.labhead .controls{position:relative;z-index:1}
+@media(max-width:800px){.labhead{top:54px;padding:10px 0;background:var(--bg)}}
