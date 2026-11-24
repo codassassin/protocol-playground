@@ -188,3 +188,25 @@ html[data-theme=ink] .field-select.field-selected{background:#e8e8e4;border-colo
 html[data-theme=ink] .field-detail{background:#f2f2ee;border-color:#999;border-radius:3px}
 html[data-theme=ink] .field-detail-value{background:#fff;border-color:#aaa;border-radius:3px}
 @media(min-width:801px){.inspector-panel .field-explorer{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start}}
+
+/* Scenario injection + checkpoint learning */
+.whatif-panel,.checkpoint{padding:12px 14px;margin:8px 0 12px;border-radius:10px}
+.whatif-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.whatif-heading h3{margin:4px 0}.whatif-heading p{margin:3px 0;font-size:12px;color:var(--muted);line-height:1.5}
+.scenario-status{font:11px ui-monospace,monospace;border:1px solid var(--line);border-radius:999px;padding:5px 8px}
+.scenario-status.scenario-on{background:var(--text);color:var(--bg)}
+.whatif-controls{display:flex;align-items:end;flex-wrap:wrap;gap:8px}
+.whatif-controls label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted);flex:1 1 130px}
+.whatif-controls select{padding:9px;background:var(--surface2);color:var(--text);border:1px solid var(--line);border-radius:8px;min-width:0}
+.scenario-explanation{margin-top:10px;padding:9px 12px;border-left:3px solid var(--accent);background:var(--surface2);font-size:13px}
+.scenario-explanation p{margin:4px 0;line-height:1.6}
+.node-failed rect{stroke:#c44747!important;stroke-dasharray:6 3!important;fill:color-mix(in srgb,#c44747 15%,var(--node))!important}
+.node-failed text.nodetitle:after{content:"OFFLINE"}
+.checkpoint-options{display:grid;gap:6px}
+.checkpoint-options button{text-align:left;font-weight:450}
+.checkpoint-options button.checkpoint-selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface2))}
+.checkpoint-feedback{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+html[data-theme=ink] .whatif-panel,html[data-theme=ink] .checkpoint{border-radius:3px;background:#fff}
+html[data-theme=ink] .whatif-controls select{border-radius:3px;background:#fff;color:#111}
+html[data-theme=ink] .scenario-explanation{background:#f1f1ed}
+html[data-theme=ink] .node-failed rect{fill:#e5dada!important;stroke:#333!important}
