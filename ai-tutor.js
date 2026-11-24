@@ -6,3 +6,8 @@ window.addEventListener('message',e=>{
     document.body.dataset.theme=d.theme;
   }
 });
+
+// Wheel/touch-like mouse scrolling for the message history without painted scrollbars.
+(()=>{const m=document.getElementById('messages');if(!m)return;
+m.addEventListener('wheel',e=>{if(m.scrollHeight>m.clientHeight){e.preventDefault();m.scrollTop+=e.deltaY}}, {passive:false});
+})();
