@@ -218,3 +218,36 @@ html[data-theme=ink] .node-failed rect{fill:#e5dada!important;stroke:#333!import
 .progress-track i{display:block;height:100%;background:var(--accent);transition:width .3s}
 html[data-theme=ink] .progress-summary{background:#fff;border-radius:3px}
 html[data-theme=ink] .progress-track i{background:#111}
+
+/* FIX: viewport workspace was using a 4-row grid for 6 direct children,
+   which forced topology/guide/inspector into tiny implicit rows. */
+@media (min-width:801px) and (min-height:780px){
+  .lab-content{
+    grid-template-rows:auto auto minmax(280px,1.35fr) minmax(230px,1fr) auto auto!important;
+    gap:8px!important;
+  }
+  .whatif-panel{margin:0!important;padding:10px 12px!important}
+  .whatif-heading h3{margin:3px 0!important}
+  .whatif-heading p{max-width:850px}
+  .whatif-controls{gap:8px}
+  .canvas{min-height:280px!important}
+  .canvas svg{width:100%;height:100%!important;min-height:0!important}
+  .lower{min-height:230px!important}
+  .lower>.panel{min-height:0!important;padding:12px 14px!important}
+  .checkpoint{margin:0!important;padding:10px 14px!important}
+  .checkpoint h3{margin:6px 0!important}
+  .checkpoint p{margin:8px 0!important}
+  .checkpoint-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .checkpoint-options button{padding:8px 10px!important}
+  footer{margin:0!important}
+}
+@media (min-width:801px) and (max-height:779px){
+  html,body,#root{height:auto!important;overflow:auto!important}
+  .pc{height:auto!important;min-height:100vh!important;overflow:visible!important}
+  .layout{height:auto!important;overflow:visible!important}
+  main{height:auto!important;overflow:visible!important}
+  .lab-content{height:auto!important;display:flex!important;flex-direction:column!important;overflow:visible!important}
+  .canvas{height:clamp(300px,48vh,500px)!important}
+  .lower{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .lower>.panel{height:auto!important;max-height:none!important;min-height:260px!important}
+}
