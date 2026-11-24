@@ -19,3 +19,7 @@ body[data-theme="ink"] #chat,body[data-theme="ink"] #messages{background:#f1efe6
 body[data-theme="ink"] .msg,body[data-theme="ink"] #quick button,body[data-theme="ink"] #send,body[data-theme="ink"] #connect,body[data-theme="ink"] #show{background:#e4e1d7!important;color:#111!important;border:1px solid #111!important}
 body[data-theme="ink"] .bot,body[data-theme="ink"] .user{background:#e4e1d7!important;color:#111!important;border:1px solid #111!important}
 body[data-theme="ink"] #send{background:#111!important;color:#f1efe6!important}
+
+/* Initial welcome screen: vertically center the greeting instead of pinning it to the top */
+#messages:has(>.msg:only-child){justify-content:center!important}
+#messages:has(>.msg:only-child)>.msg{margin-block:auto;}
