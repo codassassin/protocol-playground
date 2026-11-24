@@ -13,3 +13,6 @@
 .packetarrow{fill:var(--packet);stroke:var(--canvas);stroke-width:1.2;stroke-linejoin:round}
 .packetglyph{filter:drop-shadow(0 0 2px color-mix(in srgb,var(--packet) 20%,transparent))}
 html[data-theme=ink] .packetarrow{stroke:#f1efe6}
+
+/* Packet capsule indicator: neutral, compact, no cursor silhouette */
+.packetbadge-shape{fill:var(--surface2);stroke:var(--packet);stroke-width:1.6}.packetbadge-label{font:700 7px ui-monospace,monospace;letter-spacing:.3px;fill:var(--text)}.packetbadge{filter:none}html[data-theme=ink] .packetbadge-shape{fill:#f1efe6;stroke:#111}html[data-theme=ink] .packetbadge-label{fill:#111}
