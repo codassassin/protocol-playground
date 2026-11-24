@@ -316,19 +316,20 @@ html[data-theme=ink] .progress-track i{background:#111}
 }
 @media(max-width:800px){.layout{display:block!important}.layout:has(aside:hover){grid-template-columns:1fr!important}}
 
-/* Focused fixes: remove collapsed-rail dot artifacts and keep simulator controls reachable */
+/* Targeted repair of the previous layout override: preserve inline toolbar and compact rail */
 @media (min-width:801px){
-  aside{width:40px!important;padding:10px 3px!important;overflow-x:hidden!important}
+  aside{width:40px!important;padding:8px 2px!important}
   aside:hover,aside:focus-within{width:224px!important;padding:14px!important}
-  aside:not(:hover):not(:focus-within) .lab{width:34px!important;min-width:34px!important;padding:0!important;height:34px!important;min-height:34px!important;margin:3px 0!important;font-size:0!important;border:0!important;background:transparent!important}
+  aside:not(:hover):not(:focus-within) .lab{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important;padding:0!important;margin:3px 0!important;font-size:0!important;overflow:hidden!important}
   aside:not(:hover):not(:focus-within) .lab:after{content:none!important;display:none!important}
   aside:not(:hover):not(:focus-within) .protocol-group{border:0!important;padding:0!important;margin:3px 0!important}
   aside:not(:hover):not(:focus-within) h3,aside:not(:hover):not(:focus-within) .progress-summary,aside:not(:hover):not(:focus-within) .protocol-group h4{display:none!important}
 }
-/* Toolbar must wrap and stay above the simulation content rather than clipping its buttons. */
-.labhead{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;flex-wrap:wrap!important;gap:10px!important;overflow:visible!important;min-width:0!important}
-.labhead>div:first-child{flex:1 1 220px!important;min-width:180px!important}
-.labhead .controls{display:flex!important;flex:1 1 100%!important;width:100%!important;max-width:100%!important;justify-content:flex-start!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;overflow:visible!important;min-width:0!important}
-.labhead .controls button{flex:0 0 auto!important;min-width:max-content!important;height:40px!important;padding:0 12px!important;white-space:nowrap!important;margin:0!important}
-.labhead .controls .tutor-launch{min-width:max-content!important}
-@media (min-width:801px){.lab-content{grid-template-rows:auto auto minmax(480px,68vh) auto auto!important}.labhead{grid-column:1/-1!important;grid-row:1!important}}
+/* Title and controls remain on the same row whenever there is room. */
+.labhead{display:flex!important;align-items:center!important;justify-content:space-between!important;flex-wrap:nowrap!important;gap:12px!important;overflow:visible!important;min-width:0!important}
+.labhead>div:first-child{flex:1 1 auto!important;min-width:0!important}
+.labhead .controls{display:flex!important;flex:0 1 auto!important;width:auto!important;max-width:none!important;justify-content:flex-end!important;align-items:center!important;flex-wrap:nowrap!important;gap:6px!important;overflow:visible!important;min-width:0!important}
+.labhead .controls button{flex:0 0 auto!important;min-width:0!important;height:40px!important;padding:0 10px!important;white-space:nowrap!important;margin:0!important}
+.labhead .controls .tutor-launch{min-width:0!important;padding:0 12px!important}
+@media(max-width:1250px){.labhead{flex-wrap:wrap!important}.labhead .controls{width:100%!important;flex-wrap:wrap!important;justify-content:flex-start!important}}
+@media(min-width:801px){.lab-content{grid-template-rows:auto auto minmax(420px,68vh) auto auto!important}}
