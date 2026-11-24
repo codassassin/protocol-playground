@@ -352,3 +352,7 @@ html[data-theme="ink"] .packetarrow{fill:#111!important;stroke:#fff!important}
 /* Cursor-like packet arrow silhouette, matching the requested reference */
 .packetarrow{fill:var(--packet)!important;stroke:var(--canvas)!important;stroke-width:1.1!important;stroke-linejoin:round!important;filter:drop-shadow(0 1px 2px #0003)!important}
 html[data-theme="ink"] .packetarrow{fill:#111!important;stroke:#fff!important}
+
+/* Small black cursor pointer, rotated to follow the packet route */
+.packetarrow{fill:#111!important;stroke:none!important;stroke-width:0!important;filter:none!important}
+html[data-theme="ink"] .packetarrow{fill:#111!important;stroke:none!important}
