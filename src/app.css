@@ -22,3 +22,6 @@ html[data-theme=ink] .packetarrow{stroke:#f1efe6}
 
 /* RAF packet glide: slim directional arrow, visually crisp */
 .packetarrow{fill:var(--packet);stroke:var(--canvas);stroke-width:1;stroke-linejoin:round;filter:none}.packetflight{will-change:transform;pointer-events:none}.packetpath{stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 7;opacity:.7;filter:none}html[data-theme=ink] .packetarrow{fill:#111;stroke:#f1efe6}
+
+/* Library scale and topology legibility for expanded catalog */
+aside{max-height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px;align-self:start}.lab{line-height:1.35}.canvas svg{min-height:0}.canvas{height:clamp(360px,52vh,520px)}.node rect{filter:none}.node.active rect{stroke-width:2;filter:none}.packetflight{transition:none}.packetarrow{stroke-width:.8}.panel{min-width:0}@media(max-width:800px){aside{position:static;max-height:none;flex-wrap:nowrap;padding:10px}.canvas{height:360px}.canvas svg{min-height:0}.labhead{align-items:flex-start}}
