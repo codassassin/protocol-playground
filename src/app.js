@@ -81,7 +81,15 @@ Object.keys(labs).forEach(key=>{
 const layerNames=["Physical","Data Link","Network","Transport","Session","Presentation","Application"],layerUnits=["Bits","Frames","Packets","Segments","Sessions","Data","Requests"];
 let labKey="DNS",step=0,auto=null,cache=false,udpLoss=false,udpReorder=false,arpCached=false,fault="0",isn=1000,sIsn=7000;
 function $(id){return document.getElementById(id)}
-function render(){renderLabStatic();renderStep();}
+function render(){
+ try { renderLabStatic(); renderStep(); }
+ catch(err){
+  console.error("Packet City render failed",err);
+  const msg="Simulation render error: "+(err&&err.message?err.message:String(err));
+  ["story","packetFields","raw","visual","essentials","osi","challenge","labControls"].forEach(id=>{const el=$(id);if(el){el.textContent=id==="story"?msg:"";}});
+  const hint=$("stepText");if(hint)hint.textContent="Render error · check console";
+ }
+}
 function renderLabStatic(){
  const L=labs[labKey]; if(!L)return;
  const put=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
@@ -92,13 +100,16 @@ function renderLabStatic(){
  html("labControls",L.controls||"");
  const challenge=$("challenge");
  if(challenge&&L.challenge){
-  challenge.innerHTML='<p class="story" style="min-height:auto">'+L.challenge.q+'</p>'+L.challenge.opts.map((o,i)=>'<button class="choice" data-choice="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>').join("");
-  challenge.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
-   const ok=+b.dataset.choice===L.challenge.a;
-   challenge.querySelectorAll("button").forEach(x=>x.classList.remove("good","bad"));
-   b.classList.add(ok?"good":"bad");put("feedback",ok?L.challenge.why:"Not quite — revisit the steps, then try again.");
-  });
- }
+  const Q=Array.isArray(L.challenge)?{q:L.challenge[0],opts:L.challenge[1],a:L.challenge[2],why:L.challenge[3]}:L.challenge;
+  if(Q&&Array.isArray(Q.opts)){
+   challenge.innerHTML='<p class="story" style="min-height:auto">'+(Q.q||"")+'</p>'+Q.opts.map((o,i)=>'<button class="choice" data-choice="'+i+'">'+String.fromCharCode(65+i)+'. '+o+'</button>').join("");
+   challenge.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
+    const ok=+b.dataset.choice===Q.a;
+    challenge.querySelectorAll("button").forEach(x=>x.classList.remove("good","bad"));
+    b.classList.add(ok?"good":"bad");put("feedback",ok?(Q.why||"Correct!"):"Not quite — revisit the steps, then try again.");
+   });
+  }else challenge.textContent="Challenge data unavailable for this lab.";
+ }else if(challenge) challenge.textContent="No challenge configured for this lab.";
  html("faultControl",'<div class="field"><label>Simulate a condition</label><select id="faultSelect">'+(L.faults||[]).map((x,i)=>'<option value="'+i+'">'+x+'</option>').join("")+'</select></div>');
  const fs=$("faultSelect");if(fs){fs.value=String(fault);fs.onchange=e=>{fault=e.target.value;arpCached=false;render();};}
  bind("next",()=>{step=Math.min(labs[labKey].steps.length-1,step+1);renderStep();});
