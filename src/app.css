@@ -164,3 +164,27 @@ html[data-theme="ink"] .packetbadge-label{fill:#111!important}
 html[data-theme="ink"] .tutor-dock{background:#fff!important;border:1px solid #777!important}
 html[data-theme="ink"] .tutor-dock-head{background:#f1f1ed!important;border-bottom:1px solid #777!important}
 html[data-theme="ink"] .tutor-dock-head button{background:#fff!important;color:#111!important}
+
+/* Interactive message field explorer */
+.inspector-panel .inspector-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 12px}
+.step-pill,.direction-pill{font:600 11px ui-monospace,monospace;border:1px solid var(--line);border-radius:999px;padding:5px 9px;color:var(--muted)}
+.direction-pill{font-family:inherit;color:var(--text)}
+.field-explorer{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.field-list{display:grid;gap:5px}
+.field-select{display:grid;grid-template-columns:minmax(90px,.42fr) minmax(0,1fr) 12px;gap:10px;align-items:center;text-align:left;width:100%;margin:0;padding:9px 10px;background:var(--surface2);border:1px solid var(--line);border-radius:7px;color:var(--text);font-weight:400;min-width:0}
+.field-select:hover{border-color:var(--accent)}
+.field-select.field-selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface2))}
+.field-name{font-size:12px;font-weight:700;overflow-wrap:anywhere}
+.field-value{font:12px ui-monospace,monospace;overflow-wrap:anywhere;min-width:0}
+.field-chevron{font-size:17px;color:var(--muted)}
+.field-detail{padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface2)}
+.field-detail>small{font:10px ui-monospace,monospace;color:var(--muted);letter-spacing:.08em}
+.field-detail h3{margin:5px 0 8px}
+.field-detail-value{font:600 13px ui-monospace,monospace;padding:9px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow-wrap:anywhere}
+.field-detail p{margin:8px 0;font-size:13px;line-height:1.55}
+.field-context{color:var(--muted)}
+html[data-theme=ink] .field-select{background:#fff;border-color:#aaa;border-radius:3px}
+html[data-theme=ink] .field-select.field-selected{background:#e8e8e4;border-color:#111}
+html[data-theme=ink] .field-detail{background:#f2f2ee;border-color:#999;border-radius:3px}
+html[data-theme=ink] .field-detail-value{background:#fff;border-color:#aaa;border-radius:3px}
+@media(min-width:801px){.inspector-panel .field-explorer{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start}}
