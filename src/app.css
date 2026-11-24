@@ -333,3 +333,10 @@ html[data-theme=ink] .progress-track i{background:#111}
 .labhead .controls .tutor-launch{min-width:0!important;padding:0 12px!important}
 @media(max-width:1250px){.labhead{flex-wrap:wrap!important}.labhead .controls{width:100%!important;flex-wrap:wrap!important;justify-content:flex-start!important}}
 @media(min-width:801px){.lab-content{grid-template-rows:auto auto minmax(420px,68vh) auto auto!important}}
+
+/* Simulation controls live inside the network-flow panel while a run is active */
+.canvas{position:relative!important;min-width:0!important;overflow:hidden!important}
+.canvas-top{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;flex-wrap:wrap!important;padding:8px 10px!important;min-height:42px!important;box-sizing:border-box!important}
+.flow-controls{display:flex!important;align-items:center!important;justify-content:flex-end!important;flex-wrap:wrap!important;gap:6px!important}
+.flow-controls button{height:32px!important;padding:0 10px!important;font-size:12px!important;white-space:nowrap!important}
+@media(max-width:600px){.canvas-top{align-items:flex-start!important}.flow-controls{justify-content:flex-start!important}}
