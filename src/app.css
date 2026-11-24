@@ -4,3 +4,6 @@
 
 /* Softer active-state and packet-motion styling */
 .node.active rect{stroke:var(--accent);stroke-width:1.8;filter:drop-shadow(0 0 9px color-mix(in srgb,var(--accent) 25%,transparent));fill:color-mix(in srgb,var(--accent) 8%,var(--node))}.packetpath{stroke:var(--packet);stroke-width:3.2;stroke-dasharray:none;stroke-linecap:round;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--packet) 40%,transparent));animation:packetline 1.2s ease-out both}.packetdot{fill:var(--packet);stroke:var(--canvas);stroke-width:2.5;filter:drop-shadow(0 0 5px var(--packet))}.node:not(.active) rect{transition:stroke .25s,fill .25s}.node.active rect{transition:all .35s ease}@keyframes packetline{from{stroke-dasharray:0 1000;opacity:.25}to{stroke-dasharray:none;opacity:1}}html[data-theme=ink] .node.active rect{filter:none;fill:#e4e1d7;stroke:#111}html[data-theme=ink] .packetpath,html[data-theme=ink] .packetdot{filter:none}
+
+/* Packet motion quality gate: understated linear motion, no pointer-like blob */
+.packetpath{stroke:var(--packet);stroke-width:2;stroke-linecap:round;filter:none;animation:none}.packetdot{r:5;stroke:none;filter:none}.node.active rect{stroke:var(--accent);stroke-width:1.5;filter:none;fill:var(--node2)}html[data-theme=ink] .node.active rect{stroke:#111;stroke-width:1.5;fill:#e4e1d7}.packetpath{transition:stroke-width .2s ease}.canvas svg{overflow:visible}
