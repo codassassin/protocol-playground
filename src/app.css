@@ -340,3 +340,7 @@ html[data-theme=ink] .progress-track i{background:#111}
 .flow-controls{display:flex!important;align-items:center!important;justify-content:flex-end!important;flex-wrap:wrap!important;gap:6px!important}
 .flow-controls button{height:32px!important;padding:0 10px!important;font-size:12px!important;white-space:nowrap!important}
 @media(max-width:600px){.canvas-top{align-items:flex-start!important}.flow-controls{justify-content:flex-start!important}}
+
+/* Softer packet marker: rounded capsule rather than a sharp cursor arrow */
+.packetarrow{fill:var(--packet)!important;stroke:var(--canvas)!important;stroke-width:1.5!important;filter:drop-shadow(0 1px 2px #0003)!important}
+html[data-theme="ink"] .packetarrow{fill:#111!important;stroke:#fff!important}
