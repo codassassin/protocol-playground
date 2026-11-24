@@ -292,3 +292,38 @@ html[data-theme=ink] .progress-track i{background:#111}
  .lower{display:grid!important;grid-template-columns:1fr!important;height:auto!important}
  .lower>.panel{min-height:220px!important;height:auto!important;max-height:none!important}
 }
+
+
+/* AI Tutor: dock as a real workspace column, not a floating overlay */
+@media (min-width:801px){
+  .lab-content.tutor-open{
+    grid-template-columns:minmax(0,1fr) minmax(340px,400px)!important;
+    grid-template-rows:auto auto auto auto auto auto!important;
+    align-items:start!important;
+  }
+  .lab-content.tutor-open .labhead,
+  .lab-content.tutor-open .whatif-panel,
+  .lab-content.tutor-open .canvas,
+  .lab-content.tutor-open .lower,
+  .lab-content.tutor-open .checkpoint,
+  .lab-content.tutor-open footer{
+    grid-column:1!important;
+    grid-row:auto!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  .lab-content.tutor-open .canvas{height:clamp(420px,62vh,700px)!important;min-height:420px!important}
+  .lab-content.tutor-open .lower{display:flex!important;flex-direction:column!important;min-height:0!important;height:auto!important;overflow:visible!important}
+  .lab-content.tutor-open .lower>.panel{min-height:280px!important;max-height:none!important;height:auto!important;overflow:auto!important}
+  .lab-content.tutor-open .tutor-dock{
+    position:sticky!important;top:72px!important;right:auto!important;left:auto!important;
+    grid-column:2!important;grid-row:1 / span 6!important;
+    width:100%!important;max-width:none!important;min-width:0!important;
+    height:calc(100dvh - 88px)!important;max-height:calc(100dvh - 88px)!important;
+    margin:0!important;z-index:5!important;display:flex!important;flex-direction:column!important;
+  }
+  .lab-content.tutor-open .tutor-dock iframe{flex:1 1 auto!important;width:100%!important;min-height:0!important;height:100%!important}
+}
+@media(max-width:800px){
+ .lab-content.tutor-open .tutor-dock{position:static!important;width:100%!important;height:min(75vh,680px)!important;max-height:none!important}
+}
