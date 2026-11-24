@@ -23,3 +23,26 @@ body[data-theme="ink"] #send{background:#111!important;color:#f1efe6!important}
 /* Initial welcome screen: vertically center the greeting instead of pinning it to the top */
 #messages:has(>.msg:only-child){justify-content:center!important}
 #messages:has(>.msg:only-child)>.msg{margin-block:auto;}
+
+/* Keep the active tutor view in the full iframe viewport after the key gate closes.
+   The production tutor HTML has no inner header, so the chat must occupy the body's
+   first (and only) grid row rather than collapsing into an auto-sized row. */
+html,body{height:100%;min-height:0}
+body{
+  height:100vh;
+  height:100dvh;
+  min-height:0;
+  grid-template-rows:minmax(0,1fr);
+}
+#gate,#chat{min-height:0}
+#chat{
+  height:100%;
+  min-height:0;
+  grid-template-rows:minmax(0,1fr) auto auto;
+}
+#messages{
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+#chat>div:last-child{align-self:stretch}
