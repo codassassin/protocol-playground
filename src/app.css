@@ -251,3 +251,47 @@ html[data-theme=ink] .progress-track i{background:#111}
   .lower{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .lower>.panel{height:auto!important;max-height:none!important;min-height:260px!important}
 }
+
+/* Packet City workspace redesign: hover-expand rail, scrollable page,
+   large left topology + right-side learning/inspection panels. */
+@media(min-width:801px){
+  html,body,#root{height:auto!important;min-height:100%!important;overflow:auto!important}
+  .pc{height:auto!important;min-height:100vh!important;overflow:visible!important;display:block!important}
+  .layout{height:auto!important;min-height:calc(100vh - 60px)!important;overflow:visible!important;clip:auto!important;grid-template-columns:48px minmax(0,1fr)!important}
+  aside{width:48px!important;max-height:none!important;height:calc(100vh - 60px)!important;min-height:0!important;position:sticky!important;top:60px!important;overflow-x:hidden!important;overflow-y:auto!important;padding:12px 6px!important;z-index:30!important;transition:width .22s ease,padding .22s ease;box-shadow:none!important}
+  aside:hover,aside:focus-within{width:248px!important;padding:16px!important;position:sticky!important;box-shadow:8px 0 28px #0003!important}
+  aside:not(:hover):not(:focus-within) h3,aside:not(:hover):not(:focus-within) .progress-summary,aside:not(:hover):not(:focus-within) .protocol-group h4{opacity:0!important;pointer-events:none}
+  aside:not(:hover):not(:focus-within) .lab{font-size:0!important;overflow:hidden!important;white-space:nowrap!important;height:36px!important;padding:8px 0!important;text-align:center!important;margin:3px 0!important}
+  aside:not(:hover):not(:focus-within) .lab:after{content:"•";font-size:15px;display:block}
+  aside:not(:hover):not(:focus-within) .protocol-group{border:0!important;margin:4px 0!important;padding:0!important}
+  main{height:auto!important;min-height:calc(100vh - 60px)!important;overflow:visible!important;display:flex!important;align-items:flex-start!important;gap:12px!important;padding:14px!important}
+  .lab-content{flex:1 1 auto!important;width:100%!important;min-width:0!important;height:auto!important;overflow:visible!important;display:grid!important;
+    grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important;
+    grid-template-rows:auto auto minmax(480px,68vh) auto auto!important;gap:12px!important;align-items:stretch!important}
+  .labhead{grid-column:1/-1!important;grid-row:1!important;position:static!important}
+  .whatif-panel{grid-column:1/-1!important;grid-row:2!important;margin:0!important;padding:10px 12px!important;min-height:0!important}
+  .whatif-heading{align-items:center!important}
+  .whatif-heading p{max-width:750px!important}
+  .whatif-controls{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto auto!important;align-items:end!important;gap:8px!important}
+  .whatif-controls label{min-width:0!important}
+  .whatif-controls select{width:100%!important;padding:8px!important}
+  .scenario-explanation{margin-top:7px!important;padding:7px 9px!important}
+  .canvas{grid-column:1!important;grid-row:3!important;height:100%!important;min-height:480px!important;margin:0!important}
+  .canvas svg{height:100%!important;min-height:0!important;flex:1!important}
+  .lower{grid-column:2!important;grid-row:3!important;display:flex!important;flex-direction:column!important;height:100%!important;min-height:480px!important;max-height:none!important;overflow:visible!important;gap:12px!important}
+  .lower>.panel{flex:1 1 0!important;width:100%!important;height:auto!important;min-height:220px!important;max-height:none!important;overflow:auto!important;margin:0!important;padding:14px!important}
+  .checkpoint{grid-column:1/-1!important;grid-row:4!important;margin:0!important}
+  footer{grid-column:1/-1!important;grid-row:5!important}
+  .tutor-dock{position:sticky!important;top:72px!important;flex:0 0 clamp(300px,26vw,400px)!important;width:clamp(300px,26vw,400px)!important;height:calc(100vh - 84px)!important}
+}
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr!important}
+  aside{width:auto!important;position:static!important;max-height:none!important;height:auto!important;overflow:auto!important;transition:none!important}
+  aside:hover,aside:focus-within{width:auto!important}
+  main{display:block!important;padding:12px!important}
+  .lab-content{display:flex!important;flex-direction:column!important;height:auto!important}
+  .whatif-controls{display:flex!important;flex-wrap:wrap!important}
+  .canvas{height:400px!important;min-height:350px!important}
+  .lower{display:grid!important;grid-template-columns:1fr!important}
+  .lower>.panel{height:auto!important;min-height:220px!important}
+}
