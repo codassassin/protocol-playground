@@ -70,3 +70,6 @@ main{max-width:none;display:flex;align-items:stretch;gap:16px;padding:clamp(12px
 .labhead{position:sticky;top:54px;z-index:20;background:var(--bg);padding:12px 0 14px;margin:0 0 10px;border-bottom:1px solid var(--line);box-shadow:0 8px 18px color-mix(in srgb,var(--bg) 65%,transparent)}
 .labhead .controls{position:relative;z-index:1}
 @media(max-width:800px){.labhead{top:54px;padding:10px 0;background:var(--bg)}}
+
+/* Fade sticky lab toolbar into simulation area: opaque above, transparent below */
+.labhead{background:linear-gradient(to bottom,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 45%,color-mix(in srgb,var(--bg) 45%,transparent) 78%,transparent 100%);padding-bottom:30px;box-shadow:none;border-bottom:0}
