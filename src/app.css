@@ -210,3 +210,11 @@ html[data-theme=ink] .whatif-panel,html[data-theme=ink] .checkpoint{border-radiu
 html[data-theme=ink] .whatif-controls select{border-radius:3px;background:#fff;color:#111}
 html[data-theme=ink] .scenario-explanation{background:#f1f1ed}
 html[data-theme=ink] .node-failed rect{fill:#e5dada!important;stroke:#333!important}
+
+/* Progress badge */
+.progress-summary{padding:8px 10px;margin:8px 0 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);font-size:11px;color:var(--muted)}
+.progress-summary strong{font-size:13px;color:var(--text);margin-right:5px}
+.progress-track{height:4px;border-radius:999px;background:var(--line);margin-top:8px;overflow:hidden}
+.progress-track i{display:block;height:100%;background:var(--accent);transition:width .3s}
+html[data-theme=ink] .progress-summary{background:#fff;border-radius:3px}
+html[data-theme=ink] .progress-track i{background:#111}
