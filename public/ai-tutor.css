@@ -138,3 +138,16 @@ html,body{overflow:hidden!important}
 /* Remove scrollbar gutter/track, not just the thumb. All scroll remains functional. */
 html,body,#gate,#chat,#messages{scrollbar-width:none!important;scrollbar-gutter:auto!important;-ms-overflow-style:none!important}
 html::-webkit-scrollbar,body::-webkit-scrollbar,#gate::-webkit-scrollbar,#chat::-webkit-scrollbar,#messages::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+
+/* Final scrollbar removal: the message pane keeps programmatic scroll but never
+   paints a native scrollbar. The iframe document itself cannot scroll. */
+html,body{overflow:hidden!important;overscroll-behavior:none!important}
+#gate{overflow:hidden!important}
+#chat{overflow:hidden!important}
+#messages{
+  overflow:hidden!important;
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+  overscroll-behavior:none!important;
+}
+#messages::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
