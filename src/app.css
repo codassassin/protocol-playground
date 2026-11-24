@@ -327,3 +327,17 @@ html[data-theme=ink] .progress-track i{background:#111}
 @media(max-width:800px){
  .lab-content.tutor-open .tutor-dock{position:static!important;width:100%!important;height:min(75vh,680px)!important;max-height:none!important}
 }
+
+/* FINAL: tutor is a sibling dock in main's flex layout; remove stale fixed-overlay positioning */
+@media (min-width:801px){
+  main:has(.tutor-dock){display:flex!important;flex-direction:row!important;align-items:flex-start!important;gap:16px!important}
+  main .lab-content{flex:1 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;display:flex!important;flex-direction:column!important;height:auto!important;overflow:visible!important}
+  main .tutor-dock{position:sticky!important;inset:auto!important;top:72px!important;right:auto!important;left:auto!important;transform:none!important;float:none!important;flex:0 0 clamp(340px,30vw,420px)!important;width:clamp(340px,30vw,420px)!important;max-width:420px!important;height:calc(100dvh - 88px)!important;max-height:calc(100dvh - 88px)!important;min-height:0!important;margin:0!important;z-index:5!important;display:flex!important}
+  main .lab-content .canvas{width:100%!important;min-width:0!important}
+  main .lab-content .lower{grid-template-columns:minmax(0,1fr)!important;height:auto!important;overflow:visible!important}
+  main .lab-content .lower>.panel{min-height:240px!important;max-height:none!important;height:auto!important;overflow:visible!important}
+}
+@media(max-width:800px){
+  main:has(.tutor-dock){display:block!important}
+  main .tutor-dock{position:static!important;width:100%!important;max-width:none!important;height:min(75vh,680px)!important;margin-top:16px!important}
+}
