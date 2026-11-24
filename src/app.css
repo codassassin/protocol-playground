@@ -19,3 +19,6 @@ html[data-theme=ink] .packetarrow{stroke:#f1efe6}
 
 /* Directional arrow animation polish */
 .packettravel{filter:none}.packetarrow{fill:var(--packet);stroke:var(--canvas);stroke-width:1.1;stroke-linejoin:round;filter:none}html[data-theme=ink] .packetarrow{fill:#111;stroke:#f1efe6}.packetpath{stroke:var(--line);stroke-dasharray:3 8;stroke-width:1.4;opacity:.65}
+
+/* RAF packet glide: slim directional arrow, visually crisp */
+.packetarrow{fill:var(--packet);stroke:var(--canvas);stroke-width:1;stroke-linejoin:round;filter:none}.packetflight{will-change:transform;pointer-events:none}.packetpath{stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 7;opacity:.7;filter:none}html[data-theme=ink] .packetarrow{fill:#111;stroke:#f1efe6}
