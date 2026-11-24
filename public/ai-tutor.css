@@ -10,3 +10,26 @@
 .msg.markdown table{width:100%;max-width:100%;display:table;table-layout:auto;border-collapse:separate;border-spacing:0;margin:.8em 0;border:1px solid #405975;border-radius:9px;overflow:hidden;font-size:.86em}
 .msg.markdown thead{background:#263d57}.msg.markdown th,.msg.markdown td{border:0;border-right:1px solid #405975;border-bottom:1px solid #405975;padding:7px 8px;min-width:0;overflow-wrap:anywhere;vertical-align:top}.msg.markdown tr:last-child td{border-bottom:0}.msg.markdown th:last-child,.msg.markdown td:last-child{border-right:0}.msg.markdown tbody tr:nth-child(odd){background:#15243a}.msg.markdown tbody tr:nth-child(even){background:#1c2c40}.msg.markdown th{font-weight:750;text-align:left;color:#f1f5ff}
 .msg.markdown blockquote{margin:.8em 0;border-left:3px solid #48bdd2;background:#14263b;padding:9px 12px;border-radius:0 8px 8px 0}.msg.markdown pre{max-width:100%}.msg.markdown hr{margin:1.2em 0}
+
+/* Bottom-anchored tutor composer: conversation scrolls independently above it. */
+html,body{height:100%;min-height:0}
+body{height:100vh;height:100dvh;min-height:0;grid-template-rows:auto minmax(0,1fr)}
+#chat{
+  min-height:0;
+  height:100%;
+  display:none;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:10px;
+  overflow:hidden;
+}
+#messages{
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  justify-content:flex-start;
+}
+#quick{flex:0 0 auto}
+#chat>div:last-child{flex:0 0 auto}
+#form{align-items:stretch}
+#prompt{min-height:68px;max-height:140px}
+#foot{align-items:center}
