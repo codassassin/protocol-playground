@@ -46,3 +46,42 @@ body{
   overscroll-behavior:contain;
 }
 #chat>div:last-child{align-self:stretch}
+
+/* HARD FIX: the tutor is embedded in a tall dock. Anchor the chat section to
+   the iframe viewport explicitly instead of relying on implicit grid sizing. */
+html{height:100%!important;overflow:hidden!important}
+body{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+#gate{
+  position:absolute!important;
+  inset:0!important;
+  overflow:auto!important;
+}
+#chat{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  padding:16px!important;
+  display:none;
+  grid-template-rows:minmax(0,1fr) auto auto!important;
+  gap:10px!important;
+  overflow:hidden!important;
+}
+#messages{
+  height:100%!important;
+  min-height:0!important;
+  overflow:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+#quick{flex-shrink:0!important}
+#chat>div:last-child{flex-shrink:0!important}
