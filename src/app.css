@@ -305,3 +305,16 @@ html[data-theme=ink] .progress-track i{background:#111}
 .tutor-dock iframe{flex:1 1 auto!important;height:auto!important;min-height:0!important}
 @media(max-width:1100px){:root{--fixed-tutor-width:min(42vw,390px)}.layout:has(.tutor-dock){padding-right:calc(var(--fixed-tutor-width) + 20px)!important}.tutor-dock{position:fixed!important;top:74px!important;bottom:12px!important;right:12px!important;height:auto!important;width:var(--fixed-tutor-width)!important;margin:0!important}}
 @media(max-width:760px){:root{--fixed-tutor-width:min(92vw,440px)}.layout:has(.tutor-dock){padding-right:12px!important}.tutor-dock{width:var(--fixed-tutor-width)!important;top:64px!important;bottom:8px!important;right:8px!important;z-index:100!important}}
+
+/* FIX: protocol rail is viewport-anchored like the tutor, independent of page scroll */
+@media (min-width:801px){
+ .layout{position:relative!important;grid-template-columns:48px minmax(0,1fr)!important;overflow:visible!important}
+ aside{position:fixed!important;left:0!important;top:60px!important;bottom:0!important;width:48px!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0!important;overflow-x:hidden!important;overflow-y:auto!important;padding:12px 6px!important;z-index:40!important;background:var(--surface)!important;border-right:1px solid var(--line)!important;border-radius:0!important;transition:width .2s ease,padding .2s ease!important}
+ aside:hover,aside:focus-within{width:248px!important;padding:16px!important;z-index:60!important}
+ aside:not(:hover):not(:focus-within) h3,aside:not(:hover):not(:focus-within) .progress-summary,aside:not(:hover):not(:focus-within) .protocol-group h4{opacity:0!important;visibility:hidden!important}
+ aside:not(:hover):not(:focus-within) .lab{width:100%!important;height:36px!important;min-height:36px!important;padding:0!important;margin:3px 0!important;font-size:0!important;text-align:center!important;overflow:hidden!important;white-space:nowrap!important;display:flex!important;align-items:center!important;justify-content:center!important}
+ aside:not(:hover):not(:focus-within) .lab:after{content:"•";font-size:16px;line-height:1}
+ aside:not(:hover):not(:focus-within) .protocol-group{margin:4px 0!important;padding:0!important;border:0!important}
+ .layout>main{margin-left:0!important;min-width:0!important}
+}
+@media(max-width:800px){aside{position:static!important;left:auto!important;top:auto!important;bottom:auto!important;width:auto!important;height:auto!important}}
