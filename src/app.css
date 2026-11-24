@@ -73,3 +73,6 @@ main{max-width:none;display:flex;align-items:stretch;gap:16px;padding:clamp(12px
 
 /* Fade sticky lab toolbar into simulation area: opaque above, transparent below */
 .labhead{background:linear-gradient(to bottom,var(--bg) 0%,color-mix(in srgb,var(--bg) 88%,transparent) 45%,color-mix(in srgb,var(--bg) 45%,transparent) 78%,transparent 100%);padding-bottom:30px;box-shadow:none;border-bottom:0}
+
+/* Tutor dock refinements and e-ink consistency */
+.tutor-dock{flex-basis:clamp(390px,34vw,500px);width:clamp(390px,34vw,500px);background:var(--surface);color:var(--text)}.tutor-dock-head{background:var(--surface2);color:var(--text);border-bottom:1px solid var(--line)}.tutor-dock-head button{background:var(--surface);color:var(--text);border-color:var(--line)}html[data-theme=ink] .tutor-launch{background:#e5e2d8!important;color:#111!important;border:1px solid #111!important;filter:none!important;box-shadow:none!important}html[data-theme=ink] .tutor-dock{background:#f1efe6;border-color:#111}html[data-theme=ink] .tutor-dock-head{background:#e4e1d7;color:#111;border-color:#111}html[data-theme=ink] .tutor-dock-head button{background:#f1efe6;color:#111;border-color:#111}html[data-theme=ink] .tutor-launch:hover{filter:none!important}
