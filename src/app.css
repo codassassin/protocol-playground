@@ -360,3 +360,8 @@ html[data-theme="ink"] .packetarrow{fill:#111!important;stroke:none!important}
 /* Compact, high-contrast arrow aligned to the trajectory vector */
 .packetarrow{fill:#000!important;stroke:none!important;filter:none!important}
 html[data-theme="ink"] .packetarrow{fill:#000!important;stroke:none!important}
+
+/* Ensure the packet arrow contrasts in both themes */
+.packetarrow{fill:#111!important}
+html[data-theme="dark"] .packetarrow,html:not([data-theme="ink"]) .packetarrow{fill:#e8f1ff!important}
+html[data-theme="ink"] .packetarrow{fill:#111!important}
