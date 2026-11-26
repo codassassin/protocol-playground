@@ -33,8 +33,8 @@ Vite prints the local URL. The project is static and does not require a project-
 - [Protocol accuracy and references](docs/protocol-accuracy.md)
 - [AI Tutor notes](GEMINI_TUTOR_SETUP.md)
 
-## Contributing
-Corrections, usability feedback, lab ideas, documentation and code contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue. For lab reviews, include the protocol, step, expected and observed behavior, and a reference where possible.
+## Feedback
+Corrections, usability feedback, lab ideas and documentation feedback are welcome. Because the code is proprietary, code contributions are not accepted unless separately agreed in writing. Start with [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue. For lab reviews, include the protocol, step, expected and observed behavior, and a reference where possible.
 
 ## Project status
 Packet City is actively developed. React and earlier implementation assets coexist during migration. Check the active source entry point before editing.
@@ -42,5 +42,8 @@ Packet City is actively developed. React and earlier implementation assets coexi
 ## AI-assisted development
 AI tools may be used in development. Changes are reviewed and tested where practical; the goal is to make the code, simulations and decisions understandable and technically defensible. Independent review is encouraged.
 
-## License
-No repository license has been selected yet. Reuse and redistribution permissions should not be assumed.
+## License and reuse
+
+Packet City is proprietary and **not open source**. All rights are reserved. The repository is public for visibility, feedback and discussion—not to grant permission to reuse, copy, modify, redistribute, or create derivative projects from its code or assets. See [LICENSE](LICENSE) for the terms.
+
+GitHub's own terms may allow viewing and forking within the platform. A public repository cannot technically prevent someone from copying what they can access, and this license notice does not override GitHub's platform terms or applicable law. It asserts the copyright restrictions on reuse outside permissions granted by those terms.
