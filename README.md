@@ -1,17 +1,46 @@
 # Packet City
 
-Packet City is a static, GitHub Pages-compatible networking playground.
+**Packet City is an interactive networking playground for exploring how protocols and network flows work.**
 
-## React migration (first stage)
-The entry point is now a React/Vite shell. Existing protocol labs remain preserved in `legacy.html` during migration so features aren't lost. Labs and tools will be migrated to native React components in stages.
+It visualizes selected protocol walkthroughs as a node-and-message flow, with step controls, message details, learning notes and fault scenarios. It is an educational model—not a packet capture, network emulator, or full implementation of the protocols.
 
-## Build
+## Explore
+- Follow protocol message sequences step by step.
+- See participating hosts, network devices and services.
+- Read message summaries and selected fields.
+- Explore simplified what-if and fault scenarios.
+- Use the optional AI Network Tutor with your own API key.
+
+## Protocol labs
+DNS, ARP, TCP, UDP, HTTP, ICMP, DHCP, NTP, SSH, SMTP, IMAP, FTP, SNMP, VLAN, NAT, OSPF, BGP, MQTT, QUIC, TLS, IP and WebSocket.
+
+The depth and accuracy of each lab varies. Many flows are scripted illustrations. We are validating them against specifications and real-world behavior; please report inaccuracies.
+
+## Run locally
+Requirements: Node.js 20 or compatible recent release.
 ```bash
+git clone https://github.com/codassassin/protocol-playground.git
+cd protocol-playground
 npm install
 npm run build
+npm run dev
 ```
+Vite prints the local URL. The project is static and does not require a project-owned backend.
 
-## GitHub Pages
-The workflow `.github/workflows/pages.yml` builds Vite and publishes `dist`. Set repository Settings → Pages → Source to **GitHub Actions**.
+## Architecture and limitations
+- [Architecture overview](docs/architecture.md)
+- [Simulation model and limitations](docs/simulation-model.md)
+- [Protocol accuracy and references](docs/protocol-accuracy.md)
+- [AI Tutor notes](GEMINI_TUTOR_SETUP.md)
 
-No backend is required. The site is designed for static GitHub Pages hosting.
+## Contributing
+Corrections, usability feedback, lab ideas, documentation and code contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue. For lab reviews, include the protocol, step, expected and observed behavior, and a reference where possible.
+
+## Project status
+Packet City is actively developed. React and earlier implementation assets coexist during migration. Check the active source entry point before editing.
+
+## AI-assisted development
+AI tools may be used in development. Changes are reviewed and tested where practical; the goal is to make the code, simulations and decisions understandable and technically defensible. Independent review is encouraged.
+
+## License
+No repository license has been selected yet. Reuse and redistribution permissions should not be assumed.
